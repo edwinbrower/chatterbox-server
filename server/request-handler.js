@@ -15,7 +15,7 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 //Hoisted because ESlint wasn't happy that it wasn't defined yet.
-var urlModule = require('url');
+var url = require('url');
 var results = [];
 
 var defaultCorsHeaders = {
@@ -49,7 +49,13 @@ var requestHandler = function(request, response) {
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
-
+  // url.query('query=order:"-createdAt"');
+  // url.query('query=string');
+// order: '-createdAt'
+//?order=-createdAt
+// {'query': '-createdAt'}
+  var parsedURL = url.parse(request.url, true);
+  // console.log(parsedURL);
 
   // Tell the client we are sending them plain text.
   //
@@ -68,7 +74,8 @@ var requestHandler = function(request, response) {
     return;
   }
 
-  if (request.url === '/classes/messages') {
+  // if (request.url === '/classes/messages') {
+  if (parsedURL.pathname === '/classes/messages') {    
     if (request.method === 'POST') {
       statusCode = 201;
       request.on('data', function(data) {
