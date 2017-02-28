@@ -39,8 +39,7 @@ var requestHandler = function(request, response) {
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
 
-  console.log('request', request);
-  console.log('response', response);
+
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   // The outgoing status.
@@ -49,6 +48,7 @@ var requestHandler = function(request, response) {
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
+
   // Tell the client we are sending them plain text.
   //
   // You will need to change this if you are sending something
@@ -56,6 +56,16 @@ var requestHandler = function(request, response) {
   headers['Content-Type'] = 'text/plain';
   // headers['Content-Type'] = 'application/JSON';
 
+  if (request.url === '/classes/messages') {
+    if (request.method === 'POST') {
+      console.log('we did it!');
+      statusCode = 201;
+    } else if (request.method === 'GET') {
+      statusCode = 200;
+    }
+  } else {
+    statusCode = 404;
+  }
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -69,6 +79,7 @@ var requestHandler = function(request, response) {
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
   var results = [];
+  // results.push(response);
   var obj = JSON.stringify({'results': results});
   response.end(obj);
 };
