@@ -1,5 +1,7 @@
 /*************************************************************
 
+
+
 You should implement your request handler function in this file.
 
 requestHandler is already getting passed to http.createServer()
@@ -11,6 +13,15 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
+
+//Hoisted because ESlint wasn't happy that it wasn't defined yet.
+
+var defaultCorsHeaders = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'access-control-allow-headers': 'content-type, accept',
+  'access-control-max-age': 10 // Seconds.
+};
 
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
@@ -71,3 +82,5 @@ var defaultCorsHeaders = {
   'access-control-max-age': 10 // Seconds.
 };
 
+module.exports.requestHandler = requestHandler;
+// exports.defaultCorsHeaders = defaultCorsHeaders;  // just wrote this. we might need it later.
