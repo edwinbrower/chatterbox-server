@@ -15,6 +15,7 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 //Hoisted because ESlint wasn't happy that it wasn't defined yet.
+var results = [];
 
 var defaultCorsHeaders = {
   'access-control-allow-origin': '*',
@@ -54,18 +55,20 @@ var requestHandler = function(request, response) {
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
   headers['Content-Type'] = 'text/plain';
-  // headers['Content-Type'] = 'application/JSON';
 
   if (request.url === '/classes/messages') {
     if (request.method === 'POST') {
-      console.log('we did it!');
       statusCode = 201;
+      request.on('data', function(data) {
+        results.push(JSON.parse(data));
+      });
     } else if (request.method === 'GET') {
       statusCode = 200;
     }
   } else {
     statusCode = 404;
   }
+
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -78,7 +81,6 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  var results = [];
   // results.push(response);
   var obj = JSON.stringify({'results': results});
   response.end(obj);
@@ -101,4 +103,3 @@ var defaultCorsHeaders = {
 };
 
 module.exports.requestHandler = requestHandler;
-// exports.defaultCorsHeaders = defaultCorsHeaders;  // just wrote this. we might need it later.
