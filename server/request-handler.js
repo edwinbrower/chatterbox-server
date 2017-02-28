@@ -15,6 +15,7 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 //Hoisted because ESlint wasn't happy that it wasn't defined yet.
+var urlModule = require('url');
 var results = [];
 
 var defaultCorsHeaders = {
@@ -56,6 +57,17 @@ var requestHandler = function(request, response) {
   // other than plain text, like JSON or HTML.
   headers['Content-Type'] = 'text/plain';
 
+  if (request.method === 'OPTIONS') {
+    console.log('We are in options');
+    // setHeader to whatever it is the client needs
+
+    //we can return here
+
+    response.writeHead(200, headers);
+    response.end();
+    return;
+  }
+
   if (request.url === '/classes/messages') {
     if (request.method === 'POST') {
       statusCode = 201;
@@ -68,6 +80,26 @@ var requestHandler = function(request, response) {
   } else {
     statusCode = 404;
   }
+
+
+// work area
+
+  // if (request.url.path === '/classes/messages') {
+  //   if (request.method === 'POST') {
+  //     statusCode = 201;
+  //     var message = '';
+  //     request.on('data', function(data) {
+  //       message += data;
+  //     });
+  //     request.on('end', function() {
+  //       results.push(JSON.parse(message));
+  //     });
+  //   } else if (request.method === 'GET') {
+  //     statusCode = 200;
+  //   }
+  // } else {
+  //   statusCode = 404;
+  // }
 
 
   // .writeHead() writes to the request line and headers of the response,
