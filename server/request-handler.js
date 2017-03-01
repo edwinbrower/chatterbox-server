@@ -55,35 +55,47 @@ var requestHandler = function(request, response) {
 //?order=-createdAt
 // {'query': '-createdAt'}
   var parsedURL = url.parse(request.url, true);
-  // console.log(parsedURL);
+  // console.log(parsedURL); 
 
   // Tell the client we are sending them plain text.
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'text/plain';
+  // headers['Content-Type'] = 'text/plain';
+  headers['Content-Type'] = 'application/json';
 
   if (request.method === 'OPTIONS') {
     console.log('We are in options');
-    // setHeader to whatever it is the client needs
-
-    //we can return here
-
-    response.writeHead(200, headers);
-    response.end();
-    return;
-  }
-
+    response.writeHead(200, headers); 
+    // response.end();
+    // return;
+  } 
+  
   // if (request.url === '/classes/messages') {
   if (parsedURL.pathname === '/classes/messages') {    
     if (request.method === 'POST') {
+      // if client posted then you want to store the data
       statusCode = 201;
-      request.on('data', function(data) {
+      var data = '';
+      request.on('data', function(piece) {
+        data += piece;
+      });
+      request.on('end', function() {
         results.push(JSON.parse(data));
       });
     } else if (request.method === 'GET') {
+      // if client get then you want to give them the data
       statusCode = 200;
-    }
+      console.log('why dont i get anything on my page'); 
+      // someone said that these should be in here. but it works the same without
+      // response.writeHead(statusCode, headers);
+      // response.end(JSON.stringify({'results': results}));
+    } else if (request.method === 'PUT' || request.method === 'DELETE') {
+      // do either of these apply for our current chatterbox app? 
+      // put normally changes some value of an existing message 
+      // while delete deletes but dont think either are in the functionality
+      statusCode = 200;
+    } 
   } else {
     statusCode = 404;
   }
