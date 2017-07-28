@@ -1,7 +1,5 @@
 /*************************************************************
 
-
-
 You should implement your request handler function in this file.
 
 requestHandler is already getting passed to http.createServer()
@@ -49,11 +47,6 @@ var requestHandler = function(request, response) {
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
-  // url.query('query=order:"-createdAt"');
-  // url.query('query=string');
-// order: '-createdAt'
-//?order=-createdAt
-// {'query': '-createdAt'}
   var parsedURL = url.parse(request.url, true);
   // console.log(parsedURL); 
 
@@ -67,11 +60,8 @@ var requestHandler = function(request, response) {
   if (request.method === 'OPTIONS') {
     console.log('We are in options');
     response.writeHead(200, headers); 
-    // response.end();
-    // return;
   } 
   
-  // if (request.url === '/classes/messages') {
   if (parsedURL.pathname === '/classes/messages') {    
     if (request.method === 'POST') {
       // if client posted then you want to store the data
@@ -86,10 +76,6 @@ var requestHandler = function(request, response) {
     } else if (request.method === 'GET') {
       // if client get then you want to give them the data
       statusCode = 200;
-      console.log('why dont i get anything on my page'); 
-      // someone said that these should be in here. but it works the same without
-      // response.writeHead(statusCode, headers);
-      // response.end(JSON.stringify({'results': results}));
     } else if (request.method === 'PUT' || request.method === 'DELETE') {
       // do either of these apply for our current chatterbox app? 
       // put normally changes some value of an existing message 
@@ -99,27 +85,6 @@ var requestHandler = function(request, response) {
   } else {
     statusCode = 404;
   }
-
-
-// work area
-
-  // if (request.url.path === '/classes/messages') {
-  //   if (request.method === 'POST') {
-  //     statusCode = 201;
-  //     var message = '';
-  //     request.on('data', function(data) {
-  //       message += data;
-  //     });
-  //     request.on('end', function() {
-  //       results.push(JSON.parse(message));
-  //     });
-  //   } else if (request.method === 'GET') {
-  //     statusCode = 200;
-  //   }
-  // } else {
-  //   statusCode = 404;
-  // }
-
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
